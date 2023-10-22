@@ -3,7 +3,7 @@ layout: post
 title: Death by a Thousand Opcodes
 ---
 
-A mod (jokingly) told me I had to make a Neo Geo Pocket emulator, so I intend to showcase the pain that has caused me. I wanted to make a list of rants, but most of them were way too short, so enjoy this diary of things that made me go WTF instead.
+A mod (jokingly) told me I had to make a Neo Geo Pocket emulator, so I intend to showcase the pain that has caused me. This was going to be a list of rants, but most of them were way too short, so enjoy this diary of things that made me go WTF instead.
 
 ---
 ## 10/18/2023 - Register Encoding
@@ -58,7 +58,7 @@ I don't know whether this is a horrible and unnecessarily complicated encoding o
 
 ### Part 2
 
-I just found out you can use pre-decrement/post-increment addressing modes in RMW instructions or as the destination, and there aren't enough examples in the manual to answer my question. I know the destination address is fetched before the instruction is executed in absolute mode, but I don't know when it's calculated and when/if it gets latched for the indirect modes. Like what would happen if I did `LD XWA, (-XWA)`, `LD XWA, (XWA+)`, or `LD (-XWA), XWA`. In fact, I'm not even sure about `LD (XWA+), XWA`.
+I just found out you can use pre-decrement/post-increment addressing modes in RMW instructions or as the destination, and there aren't enough examples in the manual to answer my question. I know the destination address is fetched before the instruction is executed in absolute mode, but I don't know when it's calculated and when/if it gets latched for the indirect modes. Like what would happen if I did `LD XWA, (-XWA)`, `LD XWA, (XWA+)`, or `LD (-XWA), XWA`? Actually, I'm not even sure about `LD (XWA+), XWA`. Maybe there'll be some hints in the timing stuff I skipped over? I doubt it would be nearly as detailed as the ARM7TDMI's.
 
 ---
 ## 10/21/2023
