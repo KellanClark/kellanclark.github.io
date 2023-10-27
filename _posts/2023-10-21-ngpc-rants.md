@@ -68,3 +68,12 @@ I'm still very early in the BIOS. Implementing instructions as I run into them, 
 ![](/assets/image/ngpc-rants/dumb-bios.png)
 
 For context, all the addresses it's writing are in WRAM. I don't know why they choose to spend two instructions writing one-byte values to adjacent addresses when they could save 4 bytes by storing a word instead, especially when they've shown they know how. My only guess is the function was written in C and they used a crappy compiler.
+
+---
+## 10/26/2023
+
+I've been making a little progress. For the source prefix addressing modes, I decided to choose the behavior that made the most sense to me and go with it, but then I discovered something weirder. Despite being in the source addressing mode table, there are many opcodes that use the computed address for the destination. Looking at the destination opcode table, I noticed a lot of the instructions were about single-bits and the carry flag. Maybe source and destination are inaccurate names for the tables/prefixes?
+
+It'd probably be best to have asserts everywhere that warn me when the same register gets used in the address and operand, but that seems like a lot of work. I think I did find a clean-ish way to handle the different operand sizes though. I split the 3 prefix opcode tables into their own functions and templated the source/register ones based on size. That way I can treat certain instructions the same no matter the size, throw an error when instructions are used with the wrong size, and make different versions of/slight modifications to some instructions based on size. I also made templated versions of common instructions that show up in a few places (`AND`, `OR`, `PUSH`, etc.), so I can often use the same code for multiple sizes by passing the size template parameter to that. Like `reg32[opcode & 7] = OR<T>(operand1, operand2);` instead of making a branch that calls `OR<u8>()`, a branch that calls `OR<u16>()`, and a branch that calls `OR<u32>()`.
+
+Back to why I started writing this before going on a tangent about source prefixes. I ran into one of the last things I wanted to see today: `F5 F2 65` a.k.a. `LD (XIX+), XIY`. It has post-increment, destination addressing, and the dumb register byte all in one. What's more, it uses a special version of the register byte where the bottom 2 bits instead choose how much the post-increment adds.
